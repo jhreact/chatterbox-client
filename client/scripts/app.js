@@ -22,4 +22,7 @@ var app = {
       url: url
     });
   },
+  clearMessages: function() {
+    $('#chats').html('');
+  }
 };
