@@ -1,9 +1,10 @@
 var app = {
+  server: 'https://api.parse.com/1/classes/chatterbox',
   init: function () {},
   send: function (message, type) {
     type = type || 'POST';
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: this.server,
       type: type,
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -15,5 +16,10 @@ var app = {
       }
     });
   },
-  fetch: function() {}
+  fetch: function(url) {
+    url = url || this.server;
+    $.ajax({
+      url: url
+    });
+  },
 };
