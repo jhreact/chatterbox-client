@@ -24,5 +24,10 @@ var app = {
   },
   clearMessages: function() {
     $('#chats').html('');
+  },
+  addMessage: function(message) {
+    var htmlMessage = $('<p></p>');
+    htmlMessage.text(message.text);
+    $('#chats').append(htmlMessage);
   }
 };
