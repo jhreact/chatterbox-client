@@ -29,5 +29,10 @@ var app = {
     var htmlMessage = $('<p></p>');
     htmlMessage.text(message.text);
     $('#chats').append(htmlMessage);
+  },
+  addRoom: function(room) {
+    var htmlMessage = $('<div></div>');
+    htmlMessage.text(message.roomname);
+    $('#roomSelect').append(htmlMessage);
   }
 };
