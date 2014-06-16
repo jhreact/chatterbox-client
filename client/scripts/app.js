@@ -14,5 +14,6 @@ var app = {
         console.log('chatterbox: Failed to send message.');
       }
     });
-  }
+  },
+  fetch: function() {}
 };
