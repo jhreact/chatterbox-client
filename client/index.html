@@ -16,14 +16,21 @@
     <div id="main">
       <h1>chatterbox</h1>
       <form id="newMessage" action="">
-        <input id="message" type="text" name="message" />
+        <input id="message" type="text" name="message" placeholder="Enter new message..."/>
         <button id="send" class="submit" type="submit">Send message</button>
       </form>
       <form id="addRoom">
-        <input id="newRoomName" type="text" name"newRoomName" />
+        <input id="newRoomName" type="text" name"newRoomName" placeholder="Enter new room name..."/>
         <button id="createRoom" class="submit" type="submit">Create Room</button>
       </form>
-      <select id="roomSelect"></select>
+      <form>
+        <label>Send to:</label>
+        <select id="user"></select>
+      </form>
+      <form>
+        <label>Select Chat Room:</label>
+        <select id="roomSelect"></select>
+      </form>
       <!-- Your HTML goes here! -->
       <div id="chats"></div>
     </div>
