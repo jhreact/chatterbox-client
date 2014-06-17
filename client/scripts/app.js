@@ -26,13 +26,14 @@ var app = {
     $('#chats').html('');
   },
   addMessage: function(message) {
-    var htmlMessage = $('<p></p>');
-    htmlMessage.text(message.text);
+    var htmlMessage = $('<p class="message"></p>').text(message.text);
+    var username = $('<span class="username"></span>').text(message.username);
+    htmlMessage.append(username);
     $('#chats').append(htmlMessage);
   },
   addRoom: function(room) {
-    var htmlMessage = $('<div></div>');
-    htmlMessage.text(message.roomname);
+    var htmlMessage = $('<div></div>').text(message.roomname);
     $('#roomSelect').append(htmlMessage);
   }
 };
+
