@@ -3,7 +3,8 @@ var app = {
   init: function () {
     var self = this;
     $('.username').on('click', this.addFriend);
-    $('#send .submit').on('submit', this.handleSubmit);
+    //$('#send .submit').on('submit', this.handleSubmit);
+    $('form').on('submit', self.handleSubmit.bind(self));
     // display messages from server
     this.fetch();
     setInterval(self.fetch.bind(self), 2000);
@@ -16,6 +17,7 @@ var app = {
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function(data) {
+        $('#message').val('');
         console.log('chatterbox: Message sent.');
       },
       error: function (data) {
@@ -25,7 +27,7 @@ var app = {
   },
   fetch: function(url) {
     var self = this;
-    url = url || self.server;
+    url = url || self.server + '?order=-createdAt';
     $.ajax({
       url: url,
       success: function (data) {
@@ -61,8 +63,18 @@ var app = {
   },
   handleSubmit: function (e) {
     e.preventDefault();
+    console.log('inside handleSubmit');
+    var message = {};
+    var index = window.location.search.indexOf('=');
+    var self = this;
+    message.username = window.location.search.substring(index);
+    message.text = $('#message').val();
+    message.roomname = 'Area51';
+    self.send(message);
   }
 };
 
-app.init();
+$(function() {
+  app.init();
+});
 
