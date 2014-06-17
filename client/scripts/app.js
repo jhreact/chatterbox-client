@@ -1,6 +1,9 @@
 var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
-  init: function () {},
+  init: function () {
+    $('.username').on('click', this.addFriend);
+    $('#send .submit').on('submit', this.handleSubmit);
+  },
   send: function (message, type) {
     type = type || 'POST';
     $.ajax({
@@ -34,6 +37,12 @@ var app = {
   addRoom: function(room) {
     var htmlMessage = $('<div></div>').text(message.roomname);
     $('#roomSelect').append(htmlMessage);
+  },
+  addFriend: function(e) {
+    e.preventDefault();
+  },
+  handleSubmit: function (e) {
+    e.preventDefault();
   }
 };
 
