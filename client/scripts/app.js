@@ -1,10 +1,12 @@
 var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   init: function () {
+    var self = this;
     $('.username').on('click', this.addFriend);
     $('#send .submit').on('submit', this.handleSubmit);
     // display messages from server
     this.fetch();
+    setInterval(self.fetch.bind(self), 2000);
   },
   send: function (message, type) {
     type = type || 'POST';
@@ -23,15 +25,16 @@ var app = {
   },
   fetch: function(url) {
     var self = this;
-    url = url || this.server;
+    url = url || self.server;
     $.ajax({
       url: url,
       success: function (data) {
-        console.dir(data);
+        console.dir(data.results);
+        self.clearMessages();
         _.each(data.results, function (message, index, list) {
-          console.log('typeof self.addMessage: ' + typeof self.addMessage);
-          console.log('message:');
-          console.dir(message);
+          // console.log('typeof self.addMessage: ' + typeof self.addMessage);
+          // console.log('message:');
+          // console.dir(message);
           self.addMessage(message);
         })
       },
