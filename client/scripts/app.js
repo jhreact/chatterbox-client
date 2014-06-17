@@ -116,6 +116,9 @@ var app = {
     if (self.currentRoom !== 'all') {
       message.roomname = self.currentRoom;
     }
+    if (self.currentRecipient) {
+      message.recipient = self.currentRecipient;
+    }
     self.send(message);
   },
   addRoom: function (self) {
