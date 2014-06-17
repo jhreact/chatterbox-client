@@ -1,12 +1,14 @@
 var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   currentRoom: 'all',
+  createdRooms: {},
   init: function () {
     var self = this;
     $('.username').on('click', this.addFriend);
     //$('#send .submit').on('submit', this.handleSubmit);
-    $('form').on('submit', self.handleSubmit.bind(self));
+    $('#newMessage').on('submit', self.handleSubmit.bind(self));
     $('#roomSelect').on('change', self.selectRoom(self));
+    $('#addRoom').on('submit', self.addRoom(self));
     // display messages from server
     this.fetch();
     setInterval(self.fetch.bind(self), 2000);
@@ -57,6 +59,8 @@ var app = {
         // add 'all' option for all messages
         // app.currentRoom = 'all', by default
         // have listener .on('change') then app.currentRoom = [selected_room]
+        // iterate over app.createdRooms and extend rooms obj with createdRooms
+        _.extend(rooms, self.createdRooms);
         $roomSelect.html('');
         rooms['all'] = true;
         rooms[self.currentRoom] = true;
@@ -105,6 +109,15 @@ var app = {
       message.roomname = self.currentRoom;
     }
     self.send(message);
+  },
+  addRoom: function (self) {
+    // create an app property called createdRooms, a object to avoid duplication
+    // when user creates a room using form, add to app.createdRooms
+    return function (e) {
+      e.preventDefault();
+      self.createdRooms[$('#newRoomName').val()] = true;
+      $('#newRoomName').val('');
+    };
   }
 };
 
