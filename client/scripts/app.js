@@ -3,6 +3,8 @@ var app = {
   init: function () {
     $('.username').on('click', this.addFriend);
     $('#send .submit').on('submit', this.handleSubmit);
+    // display messages from server
+    this.fetch();
   },
   send: function (message, type) {
     type = type || 'POST';
@@ -20,9 +22,22 @@ var app = {
     });
   },
   fetch: function(url) {
+    var self = this;
     url = url || this.server;
     $.ajax({
-      url: url
+      url: url,
+      success: function (data) {
+        console.dir(data);
+        _.each(data.results, function (message, index, list) {
+          console.log('typeof self.addMessage: ' + typeof self.addMessage);
+          console.log('message:');
+          console.dir(message);
+          self.addMessage(message);
+        })
+      },
+      error: function (data) {
+        console.dir(data);
+      }
     });
   },
   clearMessages: function() {
@@ -45,4 +60,6 @@ var app = {
     e.preventDefault();
   }
 };
+
+app.init();
 
