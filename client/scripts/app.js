@@ -1,13 +1,20 @@
 var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
+  currentRoom: 'all',
   init: function () {
     var self = this;
     $('.username').on('click', this.addFriend);
     //$('#send .submit').on('submit', this.handleSubmit);
     $('form').on('submit', self.handleSubmit.bind(self));
+    $('#roomSelect').on('change', self.selectRoom(self));
     // display messages from server
     this.fetch();
     setInterval(self.fetch.bind(self), 2000);
+  },
+  selectRoom: function (self) {
+    return function(e) {
+      self.currentRoom = $(this).val();
+    };
   },
   send: function (message, type) {
     type = type || 'POST';
@@ -31,14 +38,33 @@ var app = {
     $.ajax({
       url: url,
       success: function (data) {
+        var rooms = {};
+        var $roomSelect = $('#roomSelect');
         console.dir(data.results);
         self.clearMessages();
         _.each(data.results, function (message, index, list) {
           // console.log('typeof self.addMessage: ' + typeof self.addMessage);
           // console.log('message:');
           // console.dir(message);
+          rooms[_.escape(message.roomname)] = true;
           self.addMessage(message);
-        })
+        });
+        // retain selected roomname
+        // clear out all other roomnames
+        // add selected roomname to the rooms object
+        // add 'all' option for all messages
+        // app.currentRoom = 'all', by default
+        // have listener .on('change') then app.currentRoom = [selected_room]
+        $roomSelect.html('');
+        rooms[self.currentRoom] = true;
+        _.each(Object.keys(rooms).sort(), function (value, index, list) {
+          //console.log($roomSelect);
+          if (value === self.currentRoom) {
+            $roomSelect.append('<option selected>' + value + '</option>');
+          } else {
+            $roomSelect.append('<option>' + value + '</option>');
+          }
+        });
       },
       error: function (data) {
         console.dir(data);
@@ -49,7 +75,10 @@ var app = {
     $('#chats').html('');
   },
   addMessage: function(message) {
-    var htmlMessage = $('<p class="message"></p>').text(message.text);
+    var roomname = _.escape(message.roomname);
+    var htmlMessage = $('<p class="message"></p>');
+    htmlMessage.text(message.text);
+    htmlMessage.attr('data-roomname', roomname);
     var username = $('<span class="username"></span>').text(message.username);
     htmlMessage.append(username);
     $('#chats').append(htmlMessage);
