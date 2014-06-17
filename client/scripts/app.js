@@ -95,6 +95,11 @@ var app = {
     htmlMessage.text(message.text);
     htmlMessage.attr('data-roomname', roomname);
     var username = $('<span class="username"></span>').text(message.username);
+    var $recipient = $('<span class="recipient"></span>');
+    if (message.recipient) {
+      $recipient.text('@' + message.recipient);
+      htmlMessage.append($recipient);
+    }
     htmlMessage.append(username);
     $('#chats').append(htmlMessage);
   },
