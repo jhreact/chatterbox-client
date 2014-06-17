@@ -101,7 +101,9 @@ var app = {
     var self = this;
     message.username = window.location.search.substring(index);
     message.text = $('#message').val();
-    message.roomname = 'Area51';
+    if (self.currentRoom !== 'all') {
+      message.roomname = self.currentRoom;
+    }
     self.send(message);
   }
 };
