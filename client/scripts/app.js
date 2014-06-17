@@ -2,15 +2,15 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   currentRoom: 'all',
   createdRooms: {},
-  users: {},
-  currentUser: '',
+  recipients: {},
+  currentRecipient: '',
   init: function () {
     var self = this;
     $('.username').on('click', this.addFriend);
     $('#newMessage').on('submit', self.handleSubmit.bind(self));
     $('#roomSelect').on('change', self.selectRoom(self));
     $('#addRoom').on('submit', self.addRoom(self));
-    $('#userSelect').on('change', self.selectUser(self));
+    $('#recipientSelect').on('change', self.selectRecipient(self));
     // display messages from server
     this.fetch();
     setInterval(self.fetch.bind(self), 2000);
@@ -20,9 +20,9 @@ var app = {
       self.currentRoom = $(this).val();
     };
   },
-  selectUser: function (self) {
+  selectRecipient: function (self) {
     return function (e) {
-      self.currentUser = $(this).val();
+      self.currentRecipient = $(this).val();
     };
   },
   send: function (message, type) {
@@ -50,7 +50,7 @@ var app = {
         var rooms = {};
         var $roomSelect = $('#roomSelect');
         console.dir(data.results);
-        self.setUsers(data.results);
+        self.setRecipients(data.results);
         self.clearMessages();
         _.each(data.results, function (message, index, list) {
           // console.log('typeof self.addMessage: ' + typeof self.addMessage);
@@ -127,22 +127,22 @@ var app = {
       $('#newRoomName').val('');
     };
   },
-  setUsers: function (messages) {
+  setRecipients: function (messages) {
     // iterate over messages
     //    create app level users storage object
     //    add user to storage object for each message
     var self = this;
-    $userSelect = $('#userSelect');
+    $recipientSelect = $('#recipientSelect');
     _.each(messages, function (value, index, list) {
-      self.users[value.username] = true;
+      self.recipients[value.username] = true;
     });
-    $('#userSelect').html('');
-    _.each(Object.keys(this.users).sort(), function (value, index, list) {
+    $('#recipientSelect').html('');
+    _.each(Object.keys(this.recipients).sort(), function (value, index, list) {
       // maybe set currentUser app level variable
-      if(value === self.currentUser) {
-        $userSelect.append('<option selected value="' + value + '">' + value + '</option>');
+      if(value === self.currentRecipient) {
+        $recipientSelect.append('<option selected value="' + value + '">' + value + '</option>');
       } else {
-        $userSelect.append('<option value="' + value + '">' + value + '</option>');
+        $recipientSelect.append('<option value="' + value + '">' + value + '</option>');
       }
     });
   }
