@@ -47,7 +47,9 @@ var app = {
           // console.log('message:');
           // console.dir(message);
           rooms[_.escape(message.roomname)] = true;
-          self.addMessage(message);
+          if(self.currentRoom === 'all' || self.currentRoom === message.roomname) {
+            self.addMessage(message);
+          }
         });
         // retain selected roomname
         // clear out all other roomnames
@@ -56,13 +58,14 @@ var app = {
         // app.currentRoom = 'all', by default
         // have listener .on('change') then app.currentRoom = [selected_room]
         $roomSelect.html('');
+        rooms['all'] = true;
         rooms[self.currentRoom] = true;
         _.each(Object.keys(rooms).sort(), function (value, index, list) {
           //console.log($roomSelect);
           if (value === self.currentRoom) {
-            $roomSelect.append('<option selected>' + value + '</option>');
+            $roomSelect.append('<option selected value="' + value + '">' + value + '</option>');
           } else {
-            $roomSelect.append('<option>' + value + '</option>');
+            $roomSelect.append('<option value="' + value + '">' + value + '</option>');
           }
         });
       },
