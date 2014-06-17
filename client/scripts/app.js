@@ -2,13 +2,15 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   currentRoom: 'all',
   createdRooms: {},
+  users: {},
+  currentUser: '',
   init: function () {
     var self = this;
     $('.username').on('click', this.addFriend);
-    //$('#send .submit').on('submit', this.handleSubmit);
     $('#newMessage').on('submit', self.handleSubmit.bind(self));
     $('#roomSelect').on('change', self.selectRoom(self));
     $('#addRoom').on('submit', self.addRoom(self));
+    $('#userSelect').on('change', self.selectUser(self));
     // display messages from server
     this.fetch();
     setInterval(self.fetch.bind(self), 2000);
@@ -16,6 +18,11 @@ var app = {
   selectRoom: function (self) {
     return function(e) {
       self.currentRoom = $(this).val();
+    };
+  },
+  selectUser: function (self) {
+    return function (e) {
+      self.currentUser = $(this).val();
     };
   },
   send: function (message, type) {
@@ -43,6 +50,7 @@ var app = {
         var rooms = {};
         var $roomSelect = $('#roomSelect');
         console.dir(data.results);
+        self.setUsers(data.results);
         self.clearMessages();
         _.each(data.results, function (message, index, list) {
           // console.log('typeof self.addMessage: ' + typeof self.addMessage);
@@ -118,6 +126,25 @@ var app = {
       self.createdRooms[$('#newRoomName').val()] = true;
       $('#newRoomName').val('');
     };
+  },
+  setUsers: function (messages) {
+    // iterate over messages
+    //    create app level users storage object
+    //    add user to storage object for each message
+    var self = this;
+    $userSelect = $('#userSelect');
+    _.each(messages, function (value, index, list) {
+      self.users[value.username] = true;
+    });
+    $('#userSelect').html('');
+    _.each(Object.keys(this.users).sort(), function (value, index, list) {
+      // maybe set currentUser app level variable
+      if(value === self.currentUser) {
+        $userSelect.append('<option selected value="' + value + '">' + value + '</option>');
+      } else {
+        $userSelect.append('<option value="' + value + '">' + value + '</option>');
+      }
+    });
   }
 };
 
