@@ -65,7 +65,7 @@ var app = {
     e.preventDefault();
     console.log('inside handleSubmit');
     var message = {};
-    var index = window.location.search.indexOf('=');
+    var index = window.location.search.indexOf('=') + 1;
     var self = this;
     message.username = window.location.search.substring(index);
     message.text = $('#message').val();
